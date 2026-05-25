@@ -19,10 +19,10 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Despeja tu mente — Actividades en Barcelona",
+  title: "Re-descubre — Actividades en Barcelona",
   description:
-    "Descubre y organiza actividades presenciales saludables para jóvenes en Barcelona. Paddle surf, arte, idiomas, robótica y mucho más.",
-  keywords: ["actividades Barcelona", "jóvenes", "ocio saludable", "sin pantallas"],
+    "Actividades chulas para conectar contigo y con otros. Menos pantallas, más vida — agenda actividades y añádelas a tu calendario personal.",
+  keywords: ["actividades Barcelona", "jóvenes", "ocio saludable", "sin pantallas", "agenda", "calendario"],
 };
 
 export default function RootLayout({

@@ -80,7 +80,7 @@ export default function LandingPage() {
               <span className="text-primary">recordarás</span>
             </h1>
             <p className="text-ink-light text-lg sm:text-xl mb-8 max-w-lg">
-              Actividades y comunidades saludables en tu ciudad.<br /><strong>Menos pantallas,</strong> más atención, más libertad.
+              Actividades chulas para conectar contigo y con otros.<br /><strong>Menos pantallas,</strong> más vida — agéndalas y añádelas a tu calendario personal.
             </p>
             <div className="flex flex-wrap gap-3">
               <Link

@@ -13,11 +13,11 @@ export default function Footer() {
                 <Waves className="w-4 h-4 text-white" />
               </div>
               <span className="font-display font-bold text-white">
-                Despeja tu mente
+                Re-descubre
               </span>
             </Link>
             <p className="text-sm text-white/60 max-w-xs">
-              Actividades reales en Barcelona para jóvenes que quieren vivir más y scrollear menos.
+              Actividades chulas para conectar contigo y con otros. Menos pantallas, más vida — agenda actividades y añádelas a tu calendario personal.
             </p>
           </div>
 
@@ -70,7 +70,7 @@ export default function Footer() {
 
         <div className="mt-10 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-2">
           <p className="text-xs text-white/40">
-            © 2026 Despeja tu mente. Todos los derechos reservados.
+            © 2026 Re-descubre. Todos los derechos reservados.
           </p>
           <p className="text-xs text-white/40">
             Hecho con ❤️ en Barcelona

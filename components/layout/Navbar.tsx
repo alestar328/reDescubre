@@ -38,8 +38,7 @@ export default function Navbar() {
               <Waves className="w-4 h-4 text-white" />
             </div>
             <span className="font-display font-800 text-ink text-base leading-tight hidden sm:block">
-              Despeja<br />
-              <span className="text-primary">tu mente</span>
+              Re-descubre
             </span>
           </Link>
 
