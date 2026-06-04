@@ -2,14 +2,15 @@
 
 import { Plus, AlertTriangle } from "lucide-react";
 import Link from "next/link";
-import { AgendaItem, getActivityById, getCategoryById } from "@/lib/mock-data";
+import { getCategoryById } from "@/lib/mock-data";
+import type { AgendaItemView } from "@/lib/supabase/queries";
 import ActivityChip from "./ActivityChip";
 import { cn } from "@/lib/utils";
 
 interface DayColumnProps {
   dayName: string;
   date: Date;
-  items: AgendaItem[];
+  items: AgendaItemView[];
   isToday?: boolean;
   onRemove?: (id: string) => void;
 }
@@ -74,18 +75,15 @@ export default function DayColumn({ dayName, date, items, isToday, onRemove }: D
       {/* Activity chips */}
       <div className="flex flex-col gap-1.5 px-2 pb-2 flex-1">
         {items.map((item) => {
-          const activity = getActivityById(item.activityId);
-          const category = activity ? getCategoryById(activity.categoryId) : null;
-          if (!activity || !category) return null;
-
+          const category = getCategoryById(item.categoryId);
           return (
             <ActivityChip
               key={item.id}
-              title={activity.title}
+              title={item.activityTitle}
               startTime={item.startTime}
               endTime={item.endTime}
-              color={category.color}
-              bgColor={category.bgColor}
+              color={category?.color ?? "#FF5C35"}
+              bgColor={category?.bgColor ?? "#FFE8E0"}
               status={item.status}
               onRemove={onRemove ? () => onRemove(item.id) : undefined}
             />

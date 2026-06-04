@@ -16,7 +16,12 @@
       "Bash(npx skills *)",
       "Bash(node -e \"require\\('@supabase/supabase-js'\\); require\\('@supabase/ssr'\\); console.log\\('OK'\\)\")",
       "mcp__supabase__execute_sql",
-      "mcp__supabase__apply_migration"
+      "mcp__supabase__apply_migration",
+      "Bash(git -c core.quotepath=false status --short --untracked-files=all)",
+      "Bash(findstr /V \".claude/skills\")",
+      "PowerShell(git status --short --untracked-files=all | Where-Object { $_ -notmatch '\\\\.claude/skills' })",
+      "PowerShell(git check-ignore *)",
+      "PowerShell(Write-Output \"perfil exists on disk:\"; Test-Path \"app\\\\perfil\\\\page.tsx\"; Write-Output \"carousel exists on disk:\"; Test-Path \"components\\\\activities\\\\ActivityImageCarousel.tsx\"; Write-Output \"diff lines for next.config.ts:\"; \\(git diff -- next.config.ts | Measure-Object -Line\\).Lines; Write-Output \"status for new files:\"; git status --short -- app/perfil components/activities/ActivityImageCarousel.tsx supabase/migrations)"
     ]
   },
   "enableAllProjectMcpServers": true,

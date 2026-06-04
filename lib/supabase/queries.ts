@@ -16,6 +16,7 @@ import type {
   UpdateProvider,
   UpdateActivity,
   AccountType,
+  AgendaStatus,
 } from "./types";
 
 // ---------------------------------------------------------------------------
@@ -309,13 +310,54 @@ export async function addAgendaItem(
   return { error };
 }
 
-export async function getAgendaItems(supabase: SupabaseClient, userId: string) {
+/** Item de agenda enriquecido con datos de la actividad para la UI. */
+export interface AgendaItemView {
+  id: string;
+  activityId: string;
+  activityTitle: string;
+  categoryId: string;
+  date: string;        // "YYYY-MM-DD"
+  startTime: string;   // "HH:MM"
+  endTime: string;     // "HH:MM"
+  status: AgendaStatus;
+}
+
+interface DbAgendaRow {
+  id: string;
+  activity_id: string;
+  date: string;
+  start_time: string;
+  end_time: string;
+  status: AgendaStatus;
+  activities: { title: string; category_id: string } | null;
+}
+
+export async function getAgendaItems(
+  supabase: SupabaseClient,
+  userId: string
+): Promise<AgendaItemView[]> {
   const { data } = await supabase
     .from("agenda_items")
-    .select("*")
+    .select("id, activity_id, date, start_time, end_time, status, activities (title, category_id)")
     .eq("user_id", userId)
-    .order("date", { ascending: true });
-  return data ?? [];
+    .order("date", { ascending: true })
+    .returns<DbAgendaRow[]>();
+
+  return (data ?? []).map((row) => ({
+    id: row.id,
+    activityId: row.activity_id,
+    activityTitle: row.activities?.title ?? "Actividad",
+    categoryId: row.activities?.category_id ?? "",
+    date: row.date,
+    startTime: toHHMM(row.start_time),
+    endTime: toHHMM(row.end_time),
+    status: row.status,
+  }));
+}
+
+export async function removeAgendaItem(supabase: SupabaseClient, id: string) {
+  const { error } = await supabase.from("agenda_items").delete().eq("id", id);
+  return { error };
 }
 
 // ---------------------------------------------------------------------------

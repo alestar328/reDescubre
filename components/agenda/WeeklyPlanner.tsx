@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { AgendaItem, getAgendaForWeek } from "@/lib/mock-data";
+import type { AgendaItemView } from "@/lib/supabase/queries";
 import DayColumn from "./DayColumn";
 import EmptyState from "@/components/common/EmptyState";
 
@@ -23,30 +23,28 @@ function addDays(date: Date, days: number): Date {
 }
 
 interface WeeklyPlannerProps {
-  initialItems?: AgendaItem[];
+  items: AgendaItemView[];
+  onRemove?: (id: string) => void;
 }
 
-export default function WeeklyPlanner({ initialItems }: WeeklyPlannerProps) {
-  // Demo week anchored to the mock data dates (week of May 25 2026)
-  const demoMonday = new Date("2026-05-25");
-  const [weekStart, setWeekStart] = useState<Date>(demoMonday);
-  const [removedIds, setRemovedIds] = useState<Set<string>>(new Set());
+function toLocalISODate(date: Date): string {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+
+export default function WeeklyPlanner({ items, onRemove }: WeeklyPlannerProps) {
+  const [weekStart, setWeekStart] = useState<Date>(() => getMonday(new Date()));
   const [activeTab, setActiveTab] = useState(0); // for mobile
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  const baseItems = initialItems ?? getAgendaForWeek(weekStart);
-  const items = baseItems.filter((i) => !removedIds.has(i.id));
-
-  function handleRemove(id: string) {
-    setRemovedIds((prev) => new Set([...prev, id]));
-  }
-
   const days = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
 
-  function getItemsForDay(date: Date): AgendaItem[] {
-    const dateStr = date.toISOString().split("T")[0];
+  function getItemsForDay(date: Date): AgendaItemView[] {
+    const dateStr = toLocalISODate(date);
     return items.filter((item) => item.date === dateStr);
   }
 
@@ -83,7 +81,7 @@ export default function WeeklyPlanner({ initialItems }: WeeklyPlannerProps) {
               date={day}
               items={dayItems}
               isToday={isToday}
-              onRemove={handleRemove}
+              onRemove={onRemove}
             />
           );
         })}
@@ -139,7 +137,7 @@ export default function WeeklyPlanner({ initialItems }: WeeklyPlannerProps) {
               date={day}
               items={dayItems}
               isToday={isToday}
-              onRemove={handleRemove}
+              onRemove={onRemove}
             />
           );
         })()}
