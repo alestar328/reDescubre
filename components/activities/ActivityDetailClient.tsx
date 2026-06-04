@@ -14,7 +14,7 @@ import {
 import { Activity, Category, Provider } from "@/lib/mock-data";
 import CategoryBadge from "@/components/common/CategoryBadge";
 import PriceBadge from "@/components/common/PriceBadge";
-import ActivityImagePlaceholder from "@/components/activities/ActivityImagePlaceholder";
+import ActivityImageCarousel from "@/components/activities/ActivityImageCarousel";
 import AddToAgendaModal from "@/components/activities/AddToAgendaModal";
 
 interface ActivityDetailClientProps {
@@ -41,11 +41,11 @@ export default function ActivityDetailClient({
   return (
     <>
       <div className="pt-16 min-h-screen bg-surface">
-        {/* Hero image */}
-        <ActivityImagePlaceholder
+        {/* Hero: carrusel de imágenes subidas por el proveedor */}
+        <ActivityImageCarousel
+          images={activity.images ?? (activity.imagePath ? [activity.imagePath] : [])}
           categoryId={activity.categoryId}
           imageColor={activity.imageColor}
-          imagePath={activity.imagePath}
           alt={activity.title}
           className="w-full h-64 sm:h-80 lg:h-96"
         />

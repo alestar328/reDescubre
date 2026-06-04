@@ -84,6 +84,7 @@ export default function EditarActividadPage() {
       weekday: s.weekday,
       start_time: s.startTime,
       end_time: s.endTime,
+      is_flexible: s.isFlexible ?? false,
     }));
 
     const { error } = await updateActivity(

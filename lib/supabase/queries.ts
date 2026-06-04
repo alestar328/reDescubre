@@ -45,9 +45,10 @@ export function mapDbProvider(row: DbProvider): Provider {
 }
 
 export function mapDbActivity(row: DbActivityFull): Activity {
-  const mainImage = row.activity_images
+  const sortedImages = [...row.activity_images]
     .sort((a, b) => a.sort_order - b.sort_order)
-    .find(() => true);
+    .map((img) => img.url);
+  const mainImage = sortedImages[0];
 
   return {
     id: row.id,
@@ -70,9 +71,11 @@ export function mapDbActivity(row: DbActivityFull): Activity {
       weekday: s.weekday,
       startTime: toHHMM(s.start_time),
       endTime: toHHMM(s.end_time),
+      isFlexible: s.is_flexible ?? false,
     })),
     imageColor: "#FF5C35",                          // color por defecto hasta tener imagen
-    imagePath: mainImage?.url ?? "",
+    imagePath: mainImage ?? "",
+    images: sortedImages,
     isPublished: row.is_published,
   };
 }
@@ -284,6 +287,35 @@ export async function toggleActivityPublished(
     .update({ is_published: isPublished })
     .eq("id", activityId);
   return { error };
+}
+
+// ---------------------------------------------------------------------------
+// Agenda del usuario
+// ---------------------------------------------------------------------------
+
+export async function addAgendaItem(
+  supabase: SupabaseClient,
+  item: {
+    user_id: string;
+    activity_id: string;
+    date: string;        // "YYYY-MM-DD"
+    start_time: string;  // "HH:MM"
+    end_time: string;    // "HH:MM"
+  }
+) {
+  const { error } = await supabase
+    .from("agenda_items")
+    .insert(item);
+  return { error };
+}
+
+export async function getAgendaItems(supabase: SupabaseClient, userId: string) {
+  const { data } = await supabase
+    .from("agenda_items")
+    .select("*")
+    .eq("user_id", userId)
+    .order("date", { ascending: true });
+  return data ?? [];
 }
 
 // ---------------------------------------------------------------------------

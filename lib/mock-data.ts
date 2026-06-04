@@ -29,6 +29,7 @@ export interface ActivitySchedule {
   weekday: string;
   startTime: string;
   endTime: string;
+  isFlexible?: boolean;  // true = rango en el que el cliente elige su hora; false = sesión de hora fija
 }
 
 export interface Activity {
@@ -51,6 +52,7 @@ export interface Activity {
   schedules: ActivitySchedule[];
   imageColor: string;
   imagePath: string;
+  images?: string[];   // todas las imágenes de la actividad (carrusel); imagePath = la principal
   isPublished?: boolean;
 }
 

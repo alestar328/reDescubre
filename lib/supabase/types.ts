@@ -73,6 +73,7 @@ export interface DbActivitySchedule {
   weekday: string;
   start_time: string;  // "HH:MM:SS"
   end_time: string;
+  is_flexible: boolean; // true = ventana flexible (el cliente elige su hora dentro del rango)
 }
 
 export interface DbActivityImage {

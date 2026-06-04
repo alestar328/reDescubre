@@ -68,6 +68,7 @@ export default function NuevaActividadPage() {
       weekday: s.weekday,
       start_time: s.startTime,
       end_time: s.endTime,
+      is_flexible: s.isFlexible ?? false,
     }));
 
     const { error } = await createActivity(supabase, activity, schedules, imageUrls);

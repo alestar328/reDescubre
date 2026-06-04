@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { Menu, X, Waves, LogIn, LogOut, LayoutDashboard, ChevronDown } from "lucide-react";
+import { Menu, X, Waves, LogIn, LogOut, LayoutDashboard, ChevronDown, UserRound } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth-context";
 
@@ -36,8 +36,9 @@ export default function Navbar() {
     return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, []);
 
-  const dashboardHref =
-    user?.accountType === "proveedor" ? "/proveedor/dashboard" : "/agenda";
+  const isProvider = user?.accountType === "proveedor";
+  const dashboardHref = isProvider ? "/proveedor/dashboard" : "/agenda";
+  const profileHref = isProvider ? "/proveedor/perfil" : "/perfil";
 
   return (
     <header
@@ -120,7 +121,15 @@ export default function Navbar() {
                       className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-ink hover:bg-sand transition-colors"
                     >
                       <LayoutDashboard className="w-4 h-4 text-ink-light" />
-                      {user.accountType === "proveedor" ? "Mi panel" : "Mi agenda"}
+                      {isProvider ? "Mi panel" : "Mi agenda"}
+                    </Link>
+                    <Link
+                      href={profileHref}
+                      onClick={() => setUserMenuOpen(false)}
+                      className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-ink hover:bg-sand transition-colors"
+                    >
+                      <UserRound className="w-4 h-4 text-ink-light" />
+                      Mi perfil
                     </Link>
                     <hr className="my-1 border-border" />
                     <button
@@ -200,7 +209,15 @@ export default function Navbar() {
                   className="flex items-center gap-2 text-base font-medium text-ink py-3 px-2 rounded-lg hover:bg-sand transition-colors duration-200"
                 >
                   <LayoutDashboard className="w-4 h-4 text-ink-light" />
-                  {user.accountType === "proveedor" ? "Mi panel" : "Mi agenda"}
+                  {isProvider ? "Mi panel" : "Mi agenda"}
+                </Link>
+                <Link
+                  href={profileHref}
+                  onClick={() => setMenuOpen(false)}
+                  className="flex items-center gap-2 text-base font-medium text-ink py-3 px-2 rounded-lg hover:bg-sand transition-colors duration-200"
+                >
+                  <UserRound className="w-4 h-4 text-ink-light" />
+                  Mi perfil
                 </Link>
                 <button
                   onClick={() => { setMenuOpen(false); signOut(); }}
