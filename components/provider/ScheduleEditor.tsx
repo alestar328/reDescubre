@@ -43,44 +43,47 @@ export default function ScheduleEditor({ value, onChange }: ScheduleEditorProps)
       <div className="space-y-2">
         {value.map((slot, i) => (
           <div key={i} className="bg-sand rounded-xl px-3 py-2.5 border border-border space-y-2.5">
-            <div className="flex items-center gap-2">
+            {/* Día (línea propia para no apretar en móvil) + horas */}
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2">
               {/* Día */}
               <select
                 value={slot.weekday}
                 onChange={(e) => updateSlot(i, "weekday", e.target.value)}
-                className="flex-1 min-w-0 bg-white border border-border rounded-lg px-2.5 py-1.5 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-full sm:flex-1 sm:min-w-0 bg-white border border-border rounded-lg px-2.5 py-1.5 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 {WEEKDAYS.map((d) => (
                   <option key={d} value={d}>{d}</option>
                 ))}
               </select>
 
-              {/* Hora inicio */}
-              <input
-                type="time"
-                value={slot.startTime}
-                onChange={(e) => updateSlot(i, "startTime", e.target.value)}
-                className="w-28 bg-white border border-border rounded-lg px-2.5 py-1.5 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary"
-              />
+              <div className="flex items-center gap-2">
+                {/* Hora inicio */}
+                <input
+                  type="time"
+                  value={slot.startTime}
+                  onChange={(e) => updateSlot(i, "startTime", e.target.value)}
+                  className="flex-1 min-w-0 sm:flex-none sm:w-28 bg-white border border-border rounded-lg px-2.5 py-1.5 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary"
+                />
 
-              <span className="text-xs text-ink-light shrink-0">—</span>
+                <span className="text-xs text-ink-light shrink-0">—</span>
 
-              {/* Hora fin */}
-              <input
-                type="time"
-                value={slot.endTime}
-                onChange={(e) => updateSlot(i, "endTime", e.target.value)}
-                className="w-28 bg-white border border-border rounded-lg px-2.5 py-1.5 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary"
-              />
+                {/* Hora fin */}
+                <input
+                  type="time"
+                  value={slot.endTime}
+                  onChange={(e) => updateSlot(i, "endTime", e.target.value)}
+                  className="flex-1 min-w-0 sm:flex-none sm:w-28 bg-white border border-border rounded-lg px-2.5 py-1.5 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary"
+                />
 
-              <button
-                type="button"
-                onClick={() => removeSlot(i)}
-                className="shrink-0 w-8 h-8 flex items-center justify-center rounded-lg text-ink-light hover:text-red-500 hover:bg-red-50 transition-colors focus:outline-none"
-                aria-label="Eliminar horario"
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
+                <button
+                  type="button"
+                  onClick={() => removeSlot(i)}
+                  className="shrink-0 w-8 h-8 flex items-center justify-center rounded-lg text-ink-light hover:text-red-500 hover:bg-red-50 transition-colors focus:outline-none"
+                  aria-label="Eliminar horario"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
             </div>
 
             {/* Tipo de franja: hora fija vs. rango flexible */}

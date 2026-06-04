@@ -79,7 +79,7 @@ export default function ActivityImageCarousel({
         type="button"
         onClick={prev}
         aria-label="Imagen anterior"
-        className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/85 backdrop-blur flex items-center justify-center text-ink shadow-md hover:bg-white transition-all focus:outline-none focus:ring-2 focus:ring-primary opacity-0 group-hover:opacity-100 focus:opacity-100"
+        className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/85 backdrop-blur flex items-center justify-center text-ink shadow-md hover:bg-white transition-all focus:outline-none focus:ring-2 focus:ring-primary opacity-100 sm:opacity-0 sm:group-hover:opacity-100 focus:opacity-100"
       >
         <ChevronLeft className="w-5 h-5" />
       </button>
@@ -89,7 +89,7 @@ export default function ActivityImageCarousel({
         type="button"
         onClick={next}
         aria-label="Imagen siguiente"
-        className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/85 backdrop-blur flex items-center justify-center text-ink shadow-md hover:bg-white transition-all focus:outline-none focus:ring-2 focus:ring-primary opacity-0 group-hover:opacity-100 focus:opacity-100"
+        className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/85 backdrop-blur flex items-center justify-center text-ink shadow-md hover:bg-white transition-all focus:outline-none focus:ring-2 focus:ring-primary opacity-100 sm:opacity-0 sm:group-hover:opacity-100 focus:opacity-100"
       >
         <ChevronRight className="w-5 h-5" />
       </button>
