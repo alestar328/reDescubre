@@ -96,18 +96,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
 
     // Suscripción a cambios de sesión (login / logout / token refresh)
+    // IMPORTANTE: el callback NO debe hacer `await` de llamadas a Supabase.
+    // onAuthStateChange se ejecuta con un lock interno tomado; consultar la BD
+    // (loadProfile → supabase.from(...)) dentro del callback provoca un deadlock
+    // y `setIsLoading(false)` nunca se ejecuta. Por eso diferimos con setTimeout.
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
+      (event, session) => {
         console.log("[AuthContext] onAuthStateChange event:", event, "has session:", !!session?.user);
-        try {
-          if (session?.user) {
-            await loadProfile(session.user);
-          } else {
-            setUser(null);
-          }
-        } catch (e) {
-          console.error("[AuthContext] onAuthStateChange error — isLoading will still resolve:", e);
-        } finally {
+        if (session?.user) {
+          const authUser = session.user;
+          setTimeout(() => {
+            loadProfile(authUser)
+              .catch((e) =>
+                console.error("[AuthContext] loadProfile error:", e)
+              )
+              .finally(() => setIsLoading(false));
+          }, 0);
+        } else {
+          setUser(null);
           setIsLoading(false);
         }
       }

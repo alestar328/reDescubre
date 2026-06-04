@@ -122,6 +122,15 @@ export async function getProviderByUserId(supabase: SupabaseClient, userId: stri
   return data ? mapDbProvider(data) : null;
 }
 
+export async function getProviderById(supabase: SupabaseClient, providerId: string) {
+  const { data } = await supabase
+    .from("providers")
+    .select("*")
+    .eq("id", providerId)
+    .single<DbProvider>();
+  return data ? mapDbProvider(data) : null;
+}
+
 export async function createProvider(supabase: SupabaseClient, data: InsertProvider) {
   const { data: row, error } = await supabase
     .from("providers")

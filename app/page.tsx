@@ -12,7 +12,9 @@ import {
   Building2,
 } from "lucide-react";
 
-import { activities, categories } from "@/lib/mock-data";
+import { activities as mockActivities, categories } from "@/lib/mock-data";
+import { createClient } from "@/lib/supabase/server";
+import { getPublishedActivities } from "@/lib/supabase/queries";
 import ActivityCard from "@/components/activities/ActivityCard";
 import ActivityCarousel from "@/components/home/ActivityCarousel";
 import ExplorerIcon from "@/components/icons/ExplorerIcon";
@@ -73,9 +75,14 @@ const howItWorks = [
   },
 ];
 
-const featuredActivities = activities.slice(0, 3);
+export default async function LandingPage() {
+  // Actividades reales de Supabase; si la BD está vacía, fallback a mock para no
+  // dejar la landing sin contenido durante las primeras pruebas.
+  const supabase = await createClient();
+  const dbActivities = await getPublishedActivities(supabase);
+  const activities = dbActivities.length > 0 ? dbActivities : mockActivities;
+  const featuredActivities = activities.slice(0, 3);
 
-export default function LandingPage() {
   const websiteSchema = buildWebSiteSchema();
   return (
     <>

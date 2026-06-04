@@ -14,7 +14,9 @@
       "Bash(Copy-Item *)",
       "Bash(claude mcp *)",
       "Bash(npx skills *)",
-      "Bash(node -e \"require\\('@supabase/supabase-js'\\); require\\('@supabase/ssr'\\); console.log\\('OK'\\)\")"
+      "Bash(node -e \"require\\('@supabase/supabase-js'\\); require\\('@supabase/ssr'\\); console.log\\('OK'\\)\")",
+      "mcp__supabase__execute_sql",
+      "mcp__supabase__apply_migration"
     ]
   },
   "enableAllProjectMcpServers": true,

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { activities, getActivityById, getCategoryById, getProviderById } from "@/lib/mock-data";
+import { getCategoryById } from "@/lib/mock-data";
+import { createClient } from "@/lib/supabase/server";
+import { getActivityById, getProviderById } from "@/lib/supabase/queries";
 import ActivityDetailClient from "@/components/activities/ActivityDetailClient";
 import { buildCourseSchema, SITE_URL } from "@/lib/json-ld";
 
@@ -8,26 +10,17 @@ interface Props {
   params: Promise<{ id: string }>;
 }
 
-/**
- * Pre-genera rutas estáticas para todas las actividades del catálogo.
- * Cuando se integre Supabase, sustituir por una query que devuelva todos los IDs:
- *   const { data } = await supabase.from('activities').select('id')
- *   return data.map(({ id }) => ({ id }))
- */
-export function generateStaticParams() {
-  return activities.map((activity) => ({ id: activity.id }));
-}
-
 /** Metadatos dinámicos por actividad — título, descripción e imagen específicos */
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
-  const activity = getActivityById(id);
+  const supabase = await createClient();
+  const activity = await getActivityById(supabase, id);
 
   if (!activity) {
     return { title: "Actividad no encontrada" };
   }
 
-  const provider = getProviderById(activity.providerId);
+  const provider = await getProviderById(supabase, activity.providerId);
   const priceText = activity.priceType === "free" ? "Gratis" : `${activity.priceLabel}`;
   const durationText =
     activity.durationMin >= 60
@@ -69,11 +62,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ActivityDetailPage({ params }: Props) {
   const { id } = await params;
-  const activity = getActivityById(id);
+  const supabase = await createClient();
+  const activity = await getActivityById(supabase, id);
   if (!activity) notFound();
 
   const category = getCategoryById(activity.categoryId);
-  const provider = getProviderById(activity.providerId);
+  const provider = await getProviderById(supabase, activity.providerId);
 
   const courseSchema = buildCourseSchema(activity, provider);
 
@@ -87,7 +81,7 @@ export default async function ActivityDetailPage({ params }: Props) {
       <ActivityDetailClient
         activity={activity}
         category={category}
-        provider={provider}
+        provider={provider ?? undefined}
       />
     </>
   );
