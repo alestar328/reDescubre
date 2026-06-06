@@ -3,11 +3,11 @@
  * Carga actividades desde Supabase; cae back a mock-data si la BD está vacía.
  */
 import type { Metadata } from "next";
-import { activities as mockActivities } from "@/lib/mock-data";
 import type { Activity } from "@/lib/mock-data";
 import { buildItemListSchema, SITE_URL } from "@/lib/json-ld";
 import { createClient } from "@/lib/supabase/server";
 import { getPublishedActivities } from "@/lib/supabase/queries";
+import { withShowcase } from "@/lib/mock-showcase"; // DEMO-MOCK
 import CatalogoClient from "./catalogo-client";
 
 export const metadata: Metadata = {
@@ -36,18 +36,18 @@ export const metadata: Metadata = {
 };
 
 export default async function ActividadesPage() {
-  // Intentar cargar desde Supabase; si está vacía, usar mock data
-  let displayActivities: Activity[] = mockActivities;
+  // Cargar actividades reales desde Supabase
+  let dbActivities: Activity[] = [];
 
   try {
     const supabase = await createClient();
-    const dbActivities = await getPublishedActivities(supabase);
-    if (dbActivities.length > 0) {
-      displayActivities = dbActivities;
-    }
+    dbActivities = await getPublishedActivities(supabase);
   } catch {
-    // Supabase no disponible o error de red → mock data como fallback
+    // Supabase no disponible o error de red → solo se mostrarán las de presentación
   }
+
+  // DEMO-MOCK: combinar las reales con las actividades de presentación
+  const displayActivities = withShowcase(dbActivities);
 
   const itemListSchema = buildItemListSchema(displayActivities);
 

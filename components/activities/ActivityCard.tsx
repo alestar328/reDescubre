@@ -58,6 +58,12 @@ export default function ActivityCard({ activity, animationDelay = 0 }: ActivityC
           <div className="absolute top-3 right-3 pointer-events-none">
             <PriceBadge priceType={activity.priceType} priceLabel={activity.priceLabel} />
           </div>
+          {/* DEMO-MOCK: distintivo de actividad de presentación */}
+          {activity.isMock && (
+            <span className="absolute bottom-3 left-3 pointer-events-none text-[10px] font-bold uppercase tracking-wide text-white bg-black/55 backdrop-blur-sm px-2 py-0.5 rounded-full">
+              Demo
+            </span>
+          )}
         </div>
 
         {/* Body */}

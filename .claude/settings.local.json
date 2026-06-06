@@ -22,7 +22,8 @@
       "PowerShell(git status --short --untracked-files=all | Where-Object { $_ -notmatch '\\\\.claude/skills' })",
       "PowerShell(git check-ignore *)",
       "PowerShell(Write-Output \"perfil exists on disk:\"; Test-Path \"app\\\\perfil\\\\page.tsx\"; Write-Output \"carousel exists on disk:\"; Test-Path \"components\\\\activities\\\\ActivityImageCarousel.tsx\"; Write-Output \"diff lines for next.config.ts:\"; \\(git diff -- next.config.ts | Measure-Object -Line\\).Lines; Write-Output \"status for new files:\"; git status --short -- app/perfil components/activities/ActivityImageCarousel.tsx supabase/migrations)",
-      "Bash(python *)"
+      "Bash(python *)",
+      "Bash(npx eslint *)"
     ]
   },
   "enableAllProjectMcpServers": true,

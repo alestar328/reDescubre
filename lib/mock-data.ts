@@ -54,6 +54,7 @@ export interface Activity {
   imagePath: string;
   images?: string[];   // todas las imágenes de la actividad (carrusel); imagePath = la principal
   isPublished?: boolean;
+  isMock?: boolean;    // DEMO-MOCK: true = actividad hardcodeada solo para presentación
 }
 
 export interface AgendaItem {

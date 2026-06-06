@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getCategoryById } from "@/lib/mock-data";
 import { createClient } from "@/lib/supabase/server";
 import { getActivityById, getProviderById } from "@/lib/supabase/queries";
+import { getShowcaseActivityById, getShowcaseProviderById } from "@/lib/mock-showcase"; // DEMO-MOCK
 import ActivityDetailClient from "@/components/activities/ActivityDetailClient";
 import { buildCourseSchema, SITE_URL } from "@/lib/json-ld";
 
@@ -14,13 +15,16 @@ interface Props {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   const supabase = await createClient();
-  const activity = await getActivityById(supabase, id);
+  // DEMO-MOCK: si no está en la BD, buscar en las actividades de presentación
+  const activity = (await getActivityById(supabase, id)) ?? getShowcaseActivityById(id);
 
   if (!activity) {
     return { title: "Actividad no encontrada" };
   }
 
-  const provider = await getProviderById(supabase, activity.providerId);
+  const provider =
+    (await getProviderById(supabase, activity.providerId)) ??
+    getShowcaseProviderById(activity.providerId); // DEMO-MOCK
   const priceText = activity.priceType === "free" ? "Gratis" : `${activity.priceLabel}`;
   const durationText =
     activity.durationMin >= 60
@@ -63,11 +67,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ActivityDetailPage({ params }: Props) {
   const { id } = await params;
   const supabase = await createClient();
-  const activity = await getActivityById(supabase, id);
+  // DEMO-MOCK: si no está en la BD, buscar en las actividades de presentación
+  const activity = (await getActivityById(supabase, id)) ?? getShowcaseActivityById(id);
   if (!activity) notFound();
 
   const category = getCategoryById(activity.categoryId);
-  const provider = await getProviderById(supabase, activity.providerId);
+  const provider =
+    (await getProviderById(supabase, activity.providerId)) ??
+    getShowcaseProviderById(activity.providerId); // DEMO-MOCK
 
   const courseSchema = buildCourseSchema(activity, provider);
 
