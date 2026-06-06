@@ -315,7 +315,9 @@ export interface AgendaItemView {
   id: string;
   activityId: string;
   activityTitle: string;
+  activityDescription: string;
   categoryId: string;
+  location: string;    // dirección legible para el calendario
   date: string;        // "YYYY-MM-DD"
   startTime: string;   // "HH:MM"
   endTime: string;     // "HH:MM"
@@ -329,7 +331,14 @@ interface DbAgendaRow {
   start_time: string;
   end_time: string;
   status: AgendaStatus;
-  activities: { title: string; category_id: string } | null;
+  activities: {
+    title: string;
+    description: string;
+    category_id: string;
+    location: string | null;
+    neighborhood: string | null;
+    city: string | null;
+  } | null;
 }
 
 export async function getAgendaItems(
@@ -338,7 +347,9 @@ export async function getAgendaItems(
 ): Promise<AgendaItemView[]> {
   const { data } = await supabase
     .from("agenda_items")
-    .select("id, activity_id, date, start_time, end_time, status, activities (title, category_id)")
+    .select(
+      "id, activity_id, date, start_time, end_time, status, activities (title, description, category_id, location, neighborhood, city)"
+    )
     .eq("user_id", userId)
     .order("date", { ascending: true })
     .returns<DbAgendaRow[]>();
@@ -347,7 +358,15 @@ export async function getAgendaItems(
     id: row.id,
     activityId: row.activity_id,
     activityTitle: row.activities?.title ?? "Actividad",
+    activityDescription: row.activities?.description ?? "",
     categoryId: row.activities?.category_id ?? "",
+    location: [
+      row.activities?.location,
+      row.activities?.neighborhood,
+      row.activities?.city,
+    ]
+      .filter(Boolean)
+      .join(", "),
     date: row.date,
     startTime: toHHMM(row.start_time),
     endTime: toHHMM(row.end_time),

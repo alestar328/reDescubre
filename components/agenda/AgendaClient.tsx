@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { CalendarDays, ArrowRight, Loader2 } from "lucide-react";
 import WeeklyPlanner from "@/components/agenda/WeeklyPlanner";
+import AddToCalendarSheet from "@/components/calendar/AddToCalendarSheet";
 import { categories } from "@/lib/mock-data";
 import { useAuth } from "@/lib/auth-context";
 import { createClient } from "@/lib/supabase/client";
@@ -13,6 +14,7 @@ import {
   removeAgendaItem,
   type AgendaItemView,
 } from "@/lib/supabase/queries";
+import type { CalendarEvent } from "@/lib/calendar/calendar-export";
 
 function minutesBetween(start: string, end: string): number {
   const [sh, sm] = start.split(":").map(Number);
@@ -26,6 +28,7 @@ export default function AgendaClient() {
 
   const [items, setItems] = useState<AgendaItemView[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [calendarEvent, setCalendarEvent] = useState<CalendarEvent | null>(null);
 
   // Redirigir al login si no hay sesión
   useEffect(() => {
@@ -49,6 +52,22 @@ export default function AgendaClient() {
     const supabase = createClient();
     const { error } = await removeAgendaItem(supabase, id);
     if (error) setItems(prev); // revertir si falla
+  }
+
+  function handleAddToCalendar(item: AgendaItemView) {
+    const url =
+      typeof window !== "undefined"
+        ? `${window.location.origin}/actividades/${item.activityId}`
+        : undefined;
+    setCalendarEvent({
+      title: item.activityTitle,
+      description: item.activityDescription,
+      location: item.location || undefined,
+      date: item.date,
+      startTime: item.startTime,
+      endTime: item.endTime,
+      url,
+    });
   }
 
   if (authLoading || isLoading || !user) {
@@ -105,7 +124,11 @@ export default function AgendaClient() {
         <div className="flex flex-col lg:flex-row gap-8 items-start">
           {/* Planner */}
           <div className="flex-1 min-w-0">
-            <WeeklyPlanner items={items} onRemove={handleRemove} />
+            <WeeklyPlanner
+              items={items}
+              onRemove={handleRemove}
+              onAddToCalendar={handleAddToCalendar}
+            />
           </div>
 
           {/* Summary sidebar */}
@@ -195,6 +218,11 @@ export default function AgendaClient() {
           </aside>
         </div>
       </div>
+
+      <AddToCalendarSheet
+        event={calendarEvent}
+        onClose={() => setCalendarEvent(null)}
+      />
     </div>
   );
 }

@@ -25,6 +25,7 @@ function addDays(date: Date, days: number): Date {
 interface WeeklyPlannerProps {
   items: AgendaItemView[];
   onRemove?: (id: string) => void;
+  onAddToCalendar?: (item: AgendaItemView) => void;
 }
 
 function toLocalISODate(date: Date): string {
@@ -34,7 +35,7 @@ function toLocalISODate(date: Date): string {
   return `${y}-${m}-${d}`;
 }
 
-export default function WeeklyPlanner({ items, onRemove }: WeeklyPlannerProps) {
+export default function WeeklyPlanner({ items, onRemove, onAddToCalendar }: WeeklyPlannerProps) {
   const [weekStart, setWeekStart] = useState<Date>(() => getMonday(new Date()));
   const [activeTab, setActiveTab] = useState(0); // for mobile
 
@@ -82,6 +83,7 @@ export default function WeeklyPlanner({ items, onRemove }: WeeklyPlannerProps) {
               items={dayItems}
               isToday={isToday}
               onRemove={onRemove}
+              onAddToCalendar={onAddToCalendar}
             />
           );
         })}
@@ -138,6 +140,7 @@ export default function WeeklyPlanner({ items, onRemove }: WeeklyPlannerProps) {
               items={dayItems}
               isToday={isToday}
               onRemove={onRemove}
+              onAddToCalendar={onAddToCalendar}
             />
           );
         })()}

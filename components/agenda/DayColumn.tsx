@@ -13,6 +13,7 @@ interface DayColumnProps {
   items: AgendaItemView[];
   isToday?: boolean;
   onRemove?: (id: string) => void;
+  onAddToCalendar?: (item: AgendaItemView) => void;
 }
 
 function LoadBar({ count }: { count: number }) {
@@ -37,7 +38,7 @@ function LoadBar({ count }: { count: number }) {
   );
 }
 
-export default function DayColumn({ dayName, date, items, isToday, onRemove }: DayColumnProps) {
+export default function DayColumn({ dayName, date, items, isToday, onRemove, onAddToCalendar }: DayColumnProps) {
   const overloaded = items.length >= 3;
 
   return (
@@ -86,6 +87,9 @@ export default function DayColumn({ dayName, date, items, isToday, onRemove }: D
               bgColor={category?.bgColor ?? "#FFE8E0"}
               status={item.status}
               onRemove={onRemove ? () => onRemove(item.id) : undefined}
+              onAddToCalendar={
+                onAddToCalendar ? () => onAddToCalendar(item) : undefined
+              }
             />
           );
         })}

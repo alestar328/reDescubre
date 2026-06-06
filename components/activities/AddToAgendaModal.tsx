@@ -2,12 +2,14 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import { X, CalendarDays, Clock3, LogIn, Loader2 } from "lucide-react";
+import { X, CalendarDays, Clock3, LogIn, Loader2, CheckCircle2 } from "lucide-react";
 import { Activity } from "@/lib/mock-data";
 import Toast from "@/components/common/Toast";
 import { useAuth } from "@/lib/auth-context";
 import { createClient } from "@/lib/supabase/client";
 import { addAgendaItem } from "@/lib/supabase/queries";
+import AddToCalendarMenu from "@/components/calendar/AddToCalendarMenu";
+import type { CalendarEvent } from "@/lib/calendar/calendar-export";
 
 interface AddToAgendaModalProps {
   activity: Activity;
@@ -68,6 +70,7 @@ export default function AddToAgendaModal({
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showToast, setShowToast] = useState(false);
+  const [savedEvent, setSavedEvent] = useState<CalendarEvent | null>(null);
 
   const slot = activity.schedules[slotIdx];
 
@@ -137,12 +140,33 @@ export default function AddToAgendaModal({
     }
 
     setShowToast(true);
-    setTimeout(() => {
-      onClose();
-      setShowToast(false);
-      setSelectedDate("");
-      setStartMin(null);
-    }, 1400);
+
+    // Mostrar las opciones de calendario externo en lugar de cerrar.
+    const location = [activity.location, activity.neighborhood, activity.city]
+      .filter(Boolean)
+      .join(", ");
+    const url =
+      typeof window !== "undefined"
+        ? `${window.location.origin}/actividades/${activity.id}`
+        : undefined;
+    setSavedEvent({
+      title: activity.title,
+      description: activity.description,
+      location: location || undefined,
+      date: selectedDate,
+      startTime: start,
+      endTime: end,
+      url,
+    });
+  }
+
+  function handleClose() {
+    onClose();
+    setShowToast(false);
+    setSavedEvent(null);
+    setSelectedDate("");
+    setStartMin(null);
+    setSlotIdx(0);
   }
 
   const canConfirm = !!user && !!selectedDate && !!slot && !isSaving;
@@ -152,7 +176,7 @@ export default function AddToAgendaModal({
       {/* Backdrop */}
       <div
         className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm"
-        onClick={onClose}
+        onClick={handleClose}
       />
 
       {/* Modal */}
@@ -162,10 +186,12 @@ export default function AddToAgendaModal({
           <div className="flex items-center justify-between p-5 border-b border-border sticky top-0 bg-white rounded-t-2xl">
             <div className="flex items-center gap-2">
               <CalendarDays className="w-5 h-5 text-primary" />
-              <h2 className="font-display font-bold text-ink">Añadir a mi agenda</h2>
+              <h2 className="font-display font-bold text-ink">
+                {savedEvent ? "¡Añadida a tu agenda!" : "Añadir a mi agenda"}
+              </h2>
             </div>
             <button
-              onClick={onClose}
+              onClick={handleClose}
               className="p-1.5 rounded-lg text-ink-light hover:text-ink hover:bg-sand transition-colors"
               aria-label="Cerrar"
             >
@@ -175,6 +201,35 @@ export default function AddToAgendaModal({
 
           {/* Body */}
           <div className="p-5 space-y-5">
+            {savedEvent ? (
+              <div className="space-y-5">
+                <div className="flex items-start gap-3 rounded-xl bg-green-50 border border-green-200 p-3.5">
+                  <CheckCircle2 className="w-5 h-5 text-green-600 shrink-0 mt-0.5" />
+                  <div className="text-sm text-green-800">
+                    <p className="font-semibold">{activity.title}</p>
+                    <p className="text-green-700">
+                      {new Date(`${savedEvent.date}T00:00:00`).toLocaleDateString(
+                        "es-ES",
+                        { weekday: "long", day: "numeric", month: "long" }
+                      )}
+                      {" · "}
+                      {savedEvent.startTime}–{savedEvent.endTime}
+                    </p>
+                  </div>
+                </div>
+
+                <div>
+                  <p className="text-sm font-medium text-ink mb-1">
+                    Añádela también a tu calendario
+                  </p>
+                  <p className="text-xs text-ink-light mb-3">
+                    Recibe un recordatorio en tu móvil el día de la actividad.
+                  </p>
+                  <AddToCalendarMenu event={savedEvent} />
+                </div>
+              </div>
+            ) : (
+              <>
             <div>
               <p className="text-sm font-medium text-ink mb-1">Actividad</p>
               <p className="text-base font-display font-bold text-ink">{activity.title}</p>
@@ -298,26 +353,40 @@ export default function AddToAgendaModal({
                 )}
               </>
             )}
+              </>
+            )}
           </div>
 
           {/* Footer */}
-          {user && activity.schedules.length > 0 && (
-            <div className="p-5 pt-0 flex gap-3">
+          {savedEvent ? (
+            <div className="p-5 pt-0">
               <button
-                onClick={onClose}
-                className="flex-1 py-2.5 rounded-full border border-border text-sm font-medium text-ink-light hover:bg-sand transition-colors"
+                onClick={handleClose}
+                className="w-full py-2.5 rounded-full bg-primary text-white text-sm font-medium hover:bg-primary-dark transition-colors"
               >
-                Cancelar
-              </button>
-              <button
-                onClick={handleConfirm}
-                disabled={!canConfirm}
-                className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-full bg-primary text-white text-sm font-medium hover:bg-primary-dark transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-              >
-                {isSaving && <Loader2 className="w-4 h-4 animate-spin" />}
-                Confirmar
+                Listo
               </button>
             </div>
+          ) : (
+            user &&
+            activity.schedules.length > 0 && (
+              <div className="p-5 pt-0 flex gap-3">
+                <button
+                  onClick={handleClose}
+                  className="flex-1 py-2.5 rounded-full border border-border text-sm font-medium text-ink-light hover:bg-sand transition-colors"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={handleConfirm}
+                  disabled={!canConfirm}
+                  className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-full bg-primary text-white text-sm font-medium hover:bg-primary-dark transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  {isSaving && <Loader2 className="w-4 h-4 animate-spin" />}
+                  Confirmar
+                </button>
+              </div>
+            )
           )}
         </div>
       </div>

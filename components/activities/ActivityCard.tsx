@@ -38,18 +38,24 @@ export default function ActivityCard({ activity, animationDelay = 0 }: ActivityC
       >
         {/* Image area */}
         <div className="relative aspect-[4/3] overflow-hidden">
-          <ActivityImagePlaceholder
-            categoryId={activity.categoryId}
-            imageColor={activity.imageColor}
-            imagePath={activity.imagePath}
-            alt={activity.title}
-            className="w-full h-full"
-          />
+          <Link
+            href={`/actividades/${activity.id}`}
+            aria-label={`Ver ${activity.title}`}
+            className="block w-full h-full cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:ring-inset"
+          >
+            <ActivityImagePlaceholder
+              categoryId={activity.categoryId}
+              imageColor={activity.imageColor}
+              imagePath={activity.imagePath}
+              alt={activity.title}
+              className="w-full h-full transition-transform duration-300 group-hover:scale-105"
+            />
+          </Link>
           {/* Badges overlay */}
-          <div className="absolute top-3 left-3">
+          <div className="absolute top-3 left-3 pointer-events-none">
             <CategoryBadge categoryId={activity.categoryId} />
           </div>
-          <div className="absolute top-3 right-3">
+          <div className="absolute top-3 right-3 pointer-events-none">
             <PriceBadge priceType={activity.priceType} priceLabel={activity.priceLabel} />
           </div>
         </div>
@@ -57,7 +63,12 @@ export default function ActivityCard({ activity, animationDelay = 0 }: ActivityC
         {/* Body */}
         <div className="flex flex-col flex-1 p-4">
           <h3 className="font-display font-bold text-ink text-base mb-1 line-clamp-1">
-            {activity.title}
+            <Link
+              href={`/actividades/${activity.id}`}
+              className="hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary rounded"
+            >
+              {activity.title}
+            </Link>
           </h3>
           <p className="text-sm text-ink-light line-clamp-2 mb-2 flex-1">
             {activity.description}

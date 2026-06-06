@@ -1,6 +1,6 @@
 "use client";
 
-import { X } from "lucide-react";
+import { X, CalendarPlus } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface ActivityChipProps {
@@ -11,6 +11,7 @@ interface ActivityChipProps {
   bgColor: string;
   status: "planned" | "confirmed" | "attended";
   onRemove?: () => void;
+  onAddToCalendar?: () => void;
 }
 
 export default function ActivityChip({
@@ -21,6 +22,7 @@ export default function ActivityChip({
   bgColor,
   status,
   onRemove,
+  onAddToCalendar,
 }: ActivityChipProps) {
   return (
     <div
@@ -36,20 +38,32 @@ export default function ActivityChip({
       }}
       title={`${title} · ${startTime}–${endTime}`}
     >
-      <span className="font-semibold leading-tight line-clamp-1">{title}</span>
+      <span className="font-semibold leading-tight line-clamp-1 pr-5">{title}</span>
       <span className="text-[10px] opacity-80 mt-0.5">
         {startTime}–{endTime}
       </span>
 
-      {onRemove && (
-        <button
-          onClick={onRemove}
-          className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity p-0.5 rounded hover:bg-black/10"
-          aria-label="Eliminar de la agenda"
-        >
-          <X className="w-3 h-3" />
-        </button>
-      )}
+      <div className="absolute top-1 right-1 flex items-center gap-0.5">
+        {onAddToCalendar && (
+          <button
+            onClick={onAddToCalendar}
+            className="opacity-60 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity p-0.5 rounded hover:bg-black/10"
+            aria-label="Añadir al calendario"
+            title="Añadir a Google/Apple Calendar"
+          >
+            <CalendarPlus className="w-3 h-3" />
+          </button>
+        )}
+        {onRemove && (
+          <button
+            onClick={onRemove}
+            className="opacity-60 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity p-0.5 rounded hover:bg-black/10"
+            aria-label="Eliminar de la agenda"
+          >
+            <X className="w-3 h-3" />
+          </button>
+        )}
+      </div>
     </div>
   );
 }
