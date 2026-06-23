@@ -35,7 +35,8 @@
       "Bash(command -v inkscape)",
       "Bash(command -v rsvg-convert)",
       "Bash(node -e \"try{require.resolve\\('sharp'\\);console.log\\('sharp-ok'\\)}catch\\(e\\){console.log\\('no-sharp'\\)}\")",
-      "Bash(node *)"
+      "Bash(node *)",
+      "Bash(nslookup -type=TXT redescubreapp.com 8.8.8.8)"
     ]
   },
   "enableAllProjectMcpServers": true,
