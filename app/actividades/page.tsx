@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "es_ES",
     url: `${SITE_URL}/actividades`,
-    title: "Actividades en Barcelona — Despeja tu mente",
+    title: "Actividades en Barcelona — Re-descubre app",
     description:
       "Catálogo de actividades presenciales saludables para jóvenes en Barcelona: paddle surf, teatro, robótica, escalada y mucho más.",
     images: [{ url: "/img/kayak_cover.jpg", width: 1200, height: 630 }],

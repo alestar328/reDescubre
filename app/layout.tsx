@@ -23,8 +23,8 @@ const dmSans = DM_Sans({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Despeja tu mente — Actividades para jóvenes en Barcelona",
-    template: "%s — Despeja tu mente",
+    default: "Re-descubre app — Actividades para jóvenes en Barcelona",
+    template: "%s — Re-descubre app",
   },
   description:
     "Descubre actividades presenciales saludables para jóvenes de 12 a 25 años en Barcelona. Paddle surf, teatro, robótica, escalada y mucho más. Menos pantallas, más vida.",
@@ -41,8 +41,8 @@ export const metadata: Metadata = {
     type: "website",
     locale: "es_ES",
     url: SITE_URL,
-    siteName: "Despeja tu mente",
-    title: "Despeja tu mente — Actividades para jóvenes en Barcelona",
+    siteName: "Re-descubre app",
+    title: "Re-descubre app — Actividades para jóvenes en Barcelona",
     description:
       "Descubre actividades presenciales saludables para jóvenes de 12 a 25 años en Barcelona. Menos pantallas, más vida.",
     images: [
@@ -50,13 +50,13 @@ export const metadata: Metadata = {
         url: "/img/paddelSurf_cover.jpg",
         width: 1200,
         height: 630,
-        alt: "Paddle surf en Barcelona — Despeja tu mente",
+        alt: "Paddle surf en Barcelona — Re-descubre app",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Despeja tu mente — Actividades para jóvenes en Barcelona",
+    title: "Re-descubre app — Actividades para jóvenes en Barcelona",
     description: "Descubre actividades presenciales saludables para jóvenes en Barcelona.",
     images: ["/img/paddelSurf_cover.jpg"],
   },

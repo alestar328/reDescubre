@@ -1,5 +1,5 @@
 -- =============================================================================
--- Despeja tu mente — Esquema inicial de base de datos
+-- Re-descubre app — Esquema inicial de base de datos
 -- Pegar en el SQL Editor de Supabase Dashboard y ejecutar
 -- =============================================================================
 

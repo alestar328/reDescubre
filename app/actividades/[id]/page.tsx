@@ -40,7 +40,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       type: "website",
       locale: "es_ES",
       url: `${SITE_URL}/actividades/${activity.id}`,
-      title: `${activity.title} — Despeja tu mente`,
+      title: `${activity.title} — Re-descubre app`,
       description,
       images: activity.imagePath
         ? [{ url: activity.imagePath, width: 1200, height: 630, alt: activity.title }]

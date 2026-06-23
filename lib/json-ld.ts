@@ -10,7 +10,7 @@
 import type { Activity, Provider } from "./mock-data";
 
 // Actualizar cuando el sitio esté en producción
-export const SITE_URL = "https://despejatumente.com";
+export const SITE_URL = "https://redescubreapp.com";
 
 // ISO 3166-1 alpha-2 para los países del mock data
 const COUNTRY_CODES: Record<string, string> = {
@@ -36,7 +36,7 @@ export function buildOrganizationSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "Despeja tu mente",
+    name: "Re-descubre app",
     url: SITE_URL,
     description:
       "Plataforma que conecta a jóvenes y familias con actividades presenciales saludables en Barcelona como alternativa al tiempo de pantalla.",
@@ -58,7 +58,7 @@ export function buildWebSiteSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "Despeja tu mente",
+    name: "Re-descubre app",
     url: SITE_URL,
     potentialAction: {
       "@type": "SearchAction",

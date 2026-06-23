@@ -1,5 +1,5 @@
 -- =============================================================================
--- Despeja tu mente — Fix de privilegios (GRANT) y política de avatar en Storage
+-- Re-descubre app — Fix de privilegios (GRANT) y política de avatar en Storage
 -- Pegar en el SQL Editor de Supabase Dashboard y ejecutar.
 -- =============================================================================
 --

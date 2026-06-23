@@ -6,12 +6,12 @@ import { SITE_URL } from "@/lib/json-ld";
 export const metadata: Metadata = {
   title: "Para proveedores",
   description:
-    "¿Tienes una academia, escuela o taller en Barcelona? Publica tus actividades en Despeja tu mente y llega a miles de jóvenes que buscan exactamente lo que ofreces. Sin comisión en fase beta.",
+    "¿Tienes una academia, escuela o taller en Barcelona? Publica tus actividades en Re-descubre app y llega a miles de jóvenes que buscan exactamente lo que ofreces. Sin comisión en fase beta.",
   openGraph: {
     type: "website",
     locale: "es_ES",
     url: `${SITE_URL}/proveedores`,
-    title: "Para proveedores — Despeja tu mente",
+    title: "Para proveedores — Re-descubre app",
     description:
       "Publica tus actividades y llega a jóvenes de Barcelona que buscan exactamente lo que ofreces. Gratis en fase beta.",
     images: [{ url: "/img/kayak_cover.jpg", width: 1200, height: 630 }],

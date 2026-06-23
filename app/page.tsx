@@ -22,14 +22,14 @@ import HappyIcon from "@/components/icons/HappyIcon";
 import { buildWebSiteSchema, SITE_URL } from "@/lib/json-ld";
 
 export const metadata: Metadata = {
-  title: "Despeja tu mente — Actividades para jóvenes en Barcelona",
+  title: "Re-descubre app — Actividades para jóvenes en Barcelona",
   description:
     "Descubre actividades presenciales saludables para jóvenes de 12 a 25 años en Barcelona. Paddle surf, teatro, robótica, escalada y mucho más. Menos pantallas, más vida.",
   openGraph: {
     type: "website",
     locale: "es_ES",
     url: SITE_URL,
-    title: "Despeja tu mente — Actividades para jóvenes en Barcelona",
+    title: "Re-descubre app — Actividades para jóvenes en Barcelona",
     description:
       "Descubre actividades presenciales saludables para jóvenes de 12 a 25 años en Barcelona.",
     images: [{ url: "/img/paddelSurf_cover.jpg", width: 1200, height: 630 }],

@@ -23,7 +23,19 @@
       "PowerShell(git check-ignore *)",
       "PowerShell(Write-Output \"perfil exists on disk:\"; Test-Path \"app\\\\perfil\\\\page.tsx\"; Write-Output \"carousel exists on disk:\"; Test-Path \"components\\\\activities\\\\ActivityImageCarousel.tsx\"; Write-Output \"diff lines for next.config.ts:\"; \\(git diff -- next.config.ts | Measure-Object -Line\\).Lines; Write-Output \"status for new files:\"; git status --short -- app/perfil components/activities/ActivityImageCarousel.tsx supabase/migrations)",
       "Bash(python *)",
-      "Bash(npx eslint *)"
+      "Bash(npx eslint *)",
+      "Bash(cat)",
+      "Bash(node D:/websites/redescubreTuMente/scripts-tmp-logo.mjs)",
+      "Bash(rm D:/websites/redescubreTuMente/scripts-tmp-logo.mjs)",
+      "Bash(pandoc --version)",
+      "Bash(Select-Object -First 1)",
+      "PowerShell(try { $w = New-Object -ComObject Word.Application; Write-Output \"WORD_OK $\\($w.Version\\)\"; $w.Quit\\(\\) } catch { Write-Output \"WORD_NO\" })",
+      "Bash(command -v magick)",
+      "Bash(command -v convert)",
+      "Bash(command -v inkscape)",
+      "Bash(command -v rsvg-convert)",
+      "Bash(node -e \"try{require.resolve\\('sharp'\\);console.log\\('sharp-ok'\\)}catch\\(e\\){console.log\\('no-sharp'\\)}\")",
+      "Bash(node *)"
     ]
   },
   "enableAllProjectMcpServers": true,

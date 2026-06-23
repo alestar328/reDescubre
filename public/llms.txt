@@ -1,4 +1,4 @@
-# Despeja tu mente
+# Re-descubre app
 
 > Plataforma que conecta a jóvenes (12-25 años) y sus familias con actividades
 > presenciales saludables en Barcelona como alternativa al tiempo de pantalla.
@@ -18,12 +18,12 @@
 
 ## Categorías disponibles
 
-- Exterior — Naturaleza, huertos urbanos, aire libre: [/actividades?categoria=exterior](https://despejatumente.com/actividades?categoria=exterior)
-- Playa — Paddle surf, kayak, vóley playa, deportes acuáticos: [/actividades?categoria=playa](https://despejatumente.com/actividades?categoria=playa)
-- Artística — Ilustración, cerámica, fotografía, música: [/actividades?categoria=artistica](https://despejatumente.com/actividades?categoria=artistica)
-- Social — Teatro, baile, voluntariado, debate: [/actividades?categoria=social](https://despejatumente.com/actividades?categoria=social)
-- Aprendizaje — Idiomas, robótica, programación, maker: [/actividades?categoria=aprendizaje](https://despejatumente.com/actividades?categoria=aprendizaje)
-- Deporte — Escalada, running, fitness: [/actividades?categoria=deporte](https://despejatumente.com/actividades?categoria=deporte)
+- Exterior — Naturaleza, huertos urbanos, aire libre: [/actividades?categoria=exterior](https://redescubreapp.com/actividades?categoria=exterior)
+- Playa — Paddle surf, kayak, vóley playa, deportes acuáticos: [/actividades?categoria=playa](https://redescubreapp.com/actividades?categoria=playa)
+- Artística — Ilustración, cerámica, fotografía, música: [/actividades?categoria=artistica](https://redescubreapp.com/actividades?categoria=artistica)
+- Social — Teatro, baile, voluntariado, debate: [/actividades?categoria=social](https://redescubreapp.com/actividades?categoria=social)
+- Aprendizaje — Idiomas, robótica, programación, maker: [/actividades?categoria=aprendizaje](https://redescubreapp.com/actividades?categoria=aprendizaje)
+- Deporte — Escalada, running, fitness: [/actividades?categoria=deporte](https://redescubreapp.com/actividades?categoria=deporte)
 
 ## Actividades destacadas
 
@@ -46,14 +46,14 @@ Ejemplos del catálogo actual (Barcelona, verano 2026):
 - Salsa en la Ciutadella — Gratis, Ciutadella, 90 min, 12-25 años
 - Voluntariado: Cuida un Gatito — Gratis, Sant Antoni, 120 min, 13-25 años
 
-Catálogo completo: [/actividades](https://despejatumente.com/actividades)
+Catálogo completo: [/actividades](https://redescubreapp.com/actividades)
 
 ## Páginas principales
 
-- Catálogo de actividades: [/actividades](https://despejatumente.com/actividades)
-- Cómo funciona la plataforma: [/#como-funciona](https://despejatumente.com/#como-funciona)
-- Para proveedores (academias, escuelas, talleres): [/proveedores](https://despejatumente.com/proveedores)
-- Mi agenda semanal: [/agenda](https://despejatumente.com/agenda)
+- Catálogo de actividades: [/actividades](https://redescubreapp.com/actividades)
+- Cómo funciona la plataforma: [/#como-funciona](https://redescubreapp.com/#como-funciona)
+- Para proveedores (academias, escuelas, talleres): [/proveedores](https://redescubreapp.com/proveedores)
+- Mi agenda semanal: [/agenda](https://redescubreapp.com/agenda)
 
 ## Para proveedores
 
@@ -61,7 +61,7 @@ Academias, escuelas, talleres y asociaciones de Barcelona (y próximamente Sabad
 pueden publicar sus actividades de forma gratuita durante la fase beta.
 No hay comisión ni cuota de suscripción en esta fase.
 
-Más información y alta de proveedores: [/proveedores](https://despejatumente.com/proveedores)
+Más información y alta de proveedores: [/proveedores](https://redescubreapp.com/proveedores)
 
 ## Contexto y misión
 
@@ -74,5 +74,5 @@ Ciudad de lanzamiento: Barcelona. Próxima expansión: Sabadell.
 
 ## Datos de contacto
 
-Web: https://despejatumente.com
-Email: hola@despejatumente.com
+Web: https://redescubreapp.com
+Email: soporte-redescubre@googlegroups.com
