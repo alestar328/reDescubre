@@ -5,7 +5,7 @@ export default function Footer() {
   return (
     <footer className="bg-ink text-white">
       <div className="max-w-content mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand */}
           <div>
             <Link href="/" className="flex items-center gap-2 mb-3">
@@ -56,6 +56,28 @@ export default function Footer() {
                 { href: "/proveedores", label: "Contacto" },
               ].map((link) => (
                 <li key={link.label}>
+                  <Link
+                    href={link.href}
+                    className="text-sm text-white/60 hover:text-white transition-colors duration-200"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Legal */}
+          <div>
+            <p className="text-sm font-semibold text-white/80 mb-3 uppercase tracking-wide">
+              Legal
+            </p>
+            <ul className="space-y-2">
+              {[
+                { href: "/privacidad", label: "Política de privacidad" },
+                { href: "/terminos", label: "Términos y condiciones" },
+              ].map((link) => (
+                <li key={link.href}>
                   <Link
                     href={link.href}
                     className="text-sm text-white/60 hover:text-white transition-colors duration-200"
