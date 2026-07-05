@@ -36,7 +36,8 @@
       "Bash(command -v rsvg-convert)",
       "Bash(node -e \"try{require.resolve\\('sharp'\\);console.log\\('sharp-ok'\\)}catch\\(e\\){console.log\\('no-sharp'\\)}\")",
       "Bash(node *)",
-      "Bash(nslookup -type=TXT redescubreapp.com 8.8.8.8)"
+      "Bash(nslookup -type=TXT redescubreapp.com 8.8.8.8)",
+      "PowerShell(npx tsc --noEmit)"
     ]
   },
   "enableAllProjectMcpServers": true,

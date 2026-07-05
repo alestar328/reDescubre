@@ -16,6 +16,7 @@ export type ActivityFormData = {
   durationMin: number;
   isFree: boolean;
   hasFreeTrialClass: boolean;    // clase de prueba gratuita aunque la actividad sea de pago
+  isVariablePrice: boolean;      // precio "desde X" (p. ej. talleres con niveles o materiales)
   price: number | null;
   priceLabel: string;
   minAge: number;
@@ -41,6 +42,7 @@ const defaultData: ActivityFormData = {
   durationMin: 60,
   isFree: false,
   hasFreeTrialClass: false,
+  isVariablePrice: false,
   price: null,
   priceLabel: "",
   minAge: 12,
@@ -56,6 +58,14 @@ const inputClass =
   "w-full border border-border rounded-xl px-3.5 py-2.5 text-sm text-ink bg-surface focus:outline-none focus:ring-2 focus:ring-primary placeholder:text-ink-light/50";
 
 const labelClass = "block text-sm font-medium text-ink mb-1.5";
+
+// Etiqueta de precio que se muestra en tarjetas y fichas (PriceBadge)
+export function buildPriceLabel(data: Pick<ActivityFormData, "isFree" | "isVariablePrice" | "price">): string {
+  if (data.isFree) return "Gratis";
+  if (data.price == null) return "";
+  const amount = Number.isInteger(data.price) ? String(data.price) : data.price.toFixed(2);
+  return data.isVariablePrice ? `Desde €${amount}` : `€${amount}/sesión`;
+}
 
 /**
  * Formulario compartido para crear y editar actividades.
@@ -75,7 +85,7 @@ export default function ActivityForm({ initialData, onSubmit, submitLabel = "Gua
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setIsSaving(true);
-    await onSubmit(form);
+    await onSubmit({ ...form, priceLabel: buildPriceLabel(form) });
     setIsSaving(false);
     setSavedOk(true);
     setTimeout(() => setSavedOk(false), 2500);
@@ -200,7 +210,9 @@ export default function ActivityForm({ initialData, onSubmit, submitLabel = "Gua
         {!form.isFree && (
           <div className="space-y-3">
             <div>
-              <label className={labelClass} htmlFor="act-price">Precio (€) *</label>
+              <label className={labelClass} htmlFor="act-price">
+                {form.isVariablePrice ? "Precio desde (€) *" : "Precio (€) *"}
+              </label>
               <div className="relative">
                 <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-ink-light text-sm">€</span>
                 <input
@@ -215,7 +227,27 @@ export default function ActivityForm({ initialData, onSubmit, submitLabel = "Gua
                   className={`${inputClass} pl-8`}
                 />
               </div>
+              {form.price != null && form.price > 0 && (
+                <p className="text-xs text-ink-light mt-1">
+                  Se mostrará como: <span className="font-medium text-ink">{buildPriceLabel(form)}</span>
+                </p>
+              )}
             </div>
+
+            <label className="flex items-center gap-3 cursor-pointer group">
+              <input
+                type="checkbox"
+                checked={form.isVariablePrice}
+                onChange={(e) => set("isVariablePrice", e.target.checked)}
+                className="w-4 h-4 rounded border-border text-primary focus:ring-primary"
+              />
+              <div>
+                <span className="text-sm font-medium text-ink">Precio variable</span>
+                <p className="text-xs text-ink-light">
+                  El precio parte de una cantidad mínima y puede variar según nivel, materiales u opciones (p. ej. talleres de pintura)
+                </p>
+              </div>
+            </label>
 
             <label className="flex items-center gap-3 cursor-pointer group">
               <input

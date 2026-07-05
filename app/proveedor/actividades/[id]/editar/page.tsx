@@ -132,6 +132,8 @@ export default function EditarActividadPage() {
     durationMin: activity.durationMin,
     isFree: activity.priceType === "free",
     hasFreeTrialClass: false,
+    // El flag no se guarda como columna: se infiere de la etiqueta "Desde €X"
+    isVariablePrice: activity.priceLabel.startsWith("Desde"),
     price: activity.price,
     priceLabel: activity.priceLabel,
     minAge: activity.minAge,
