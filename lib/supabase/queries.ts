@@ -61,6 +61,7 @@ export function mapDbActivity(row: DbActivityFull): Activity {
     price: row.price,
     priceType: row.is_free ? "free" : "paid",
     priceLabel: row.price_label,
+    bookingUrl: row.booking_url ?? undefined,
     durationMin: row.duration_min,
     minAge: row.min_age,
     maxAge: row.max_age,

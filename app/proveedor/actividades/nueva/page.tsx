@@ -54,6 +54,7 @@ export default function NuevaActividadPage() {
       has_free_trial_class: data.hasFreeTrialClass,
       price: data.isFree ? null : data.price,
       price_label: data.priceLabel,
+      booking_url: data.bookingUrl.trim() || null,
       min_age: data.minAge,
       max_age: data.maxAge,
       location: data.location || null,

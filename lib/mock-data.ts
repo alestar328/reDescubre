@@ -42,6 +42,7 @@ export interface Activity {
   price: number | null;
   priceType: "free" | "paid";
   priceLabel: string;
+  bookingUrl?: string;  // enlace externo de reservas si el proveedor gestiona la asistencia (Booksy, etc.)
   durationMin: number;
   minAge: number;
   maxAge: number;

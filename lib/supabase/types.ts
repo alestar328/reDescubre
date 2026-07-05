@@ -56,6 +56,7 @@ export interface DbActivity {
   has_free_trial_class: boolean;
   price: number | null;
   price_label: string;
+  booking_url: string | null;  // enlace externo de reservas (Booksy, Calendly, web propia...)
   min_age: number;
   max_age: number;
   location: string | null;

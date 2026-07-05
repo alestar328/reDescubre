@@ -19,6 +19,7 @@ export type ActivityFormData = {
   isVariablePrice: boolean;      // precio "desde X" (p. ej. talleres con niveles o materiales)
   price: number | null;
   priceLabel: string;
+  bookingUrl: string;            // enlace externo de reservas (Booksy, Calendly...); "" = sin reserva externa
   minAge: number;
   maxAge: number;
   location: string;
@@ -45,6 +46,7 @@ const defaultData: ActivityFormData = {
   isVariablePrice: false,
   price: null,
   priceLabel: "",
+  bookingUrl: "",
   minAge: 12,
   maxAge: 25,
   location: "",
@@ -295,6 +297,30 @@ export default function ActivityForm({ initialData, onSubmit, submitLabel = "Gua
               className={inputClass}
             />
           </div>
+        </div>
+      </fieldset>
+
+      {/* Sección: Reservas */}
+      <fieldset className="space-y-4">
+        <legend className="font-display font-semibold text-base text-ink border-b border-border pb-2 w-full">
+          Reservas
+        </legend>
+        <div>
+          <label className={labelClass} htmlFor="act-booking-url">
+            Enlace de reservas <span className="text-ink-light font-normal">(opcional)</span>
+          </label>
+          <input
+            id="act-booking-url"
+            type="url"
+            value={form.bookingUrl}
+            onChange={(e) => set("bookingUrl", e.target.value)}
+            placeholder="https://booksy.com/es-es/tu-negocio"
+            className={inputClass}
+          />
+          <p className="text-xs text-ink-light mt-1">
+            Si gestionas las plazas en tu propia plataforma (Booksy, Calendly, tu web...), pega aquí el
+            enlace. Los jóvenes verán un botón «Reservar» que les llevará directamente a él.
+          </p>
         </div>
       </fieldset>
 

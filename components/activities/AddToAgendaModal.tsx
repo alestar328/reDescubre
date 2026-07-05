@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import { X, CalendarDays, Clock3, LogIn, Loader2, CheckCircle2 } from "lucide-react";
+import { X, CalendarDays, Clock3, LogIn, Loader2, CheckCircle2, ExternalLink } from "lucide-react";
 import { Activity } from "@/lib/mock-data";
 import Toast from "@/components/common/Toast";
 import { useAuth } from "@/lib/auth-context";
@@ -234,6 +234,25 @@ export default function AddToAgendaModal({
               <p className="text-sm font-medium text-ink mb-1">Actividad</p>
               <p className="text-base font-display font-bold text-ink">{activity.title}</p>
             </div>
+
+            {/* Reserva externa: el proveedor gestiona la asistencia en su propia plataforma */}
+            {activity.bookingUrl && (
+              <div className="rounded-xl bg-primary/5 border border-primary/20 p-3.5 space-y-2.5">
+                <p className="text-sm text-ink">
+                  Este proveedor gestiona las plazas en su propia plataforma de reservas.
+                  Reserva allí tu plaza y luego añade la actividad a tu agenda.
+                </p>
+                <a
+                  href={activity.bookingUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-primary text-white text-sm font-medium px-4 py-2.5 rounded-full hover:bg-primary-dark transition-colors"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  Reservar con el proveedor
+                </a>
+              </div>
+            )}
 
             {!user ? (
               <div className="text-center py-4 space-y-3">
