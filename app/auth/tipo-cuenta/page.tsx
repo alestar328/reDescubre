@@ -27,7 +27,7 @@ const options: { id: TipoCuenta; icon: React.ElementType; title: string; desc: s
     icon: Building2,
     title: "Soy proveedor",
     desc: "Tengo una academia, escuela o taller y quiero publicar actividades.",
-    badge: "Gratis en beta",
+    badge: "Totalmente gratis",
   },
 ];
 
