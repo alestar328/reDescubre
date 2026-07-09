@@ -141,6 +141,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const supabase = createClient();
     await supabase.auth.signOut();
     setUser(null);
+    // Navegación completa (no router.push) para que el servidor re-renderice
+    // sin cookies de sesión y no queden guards redirigiendo a /auth/login
+    window.location.href = "/";
   }, []);
 
   return (

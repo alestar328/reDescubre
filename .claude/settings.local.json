@@ -37,7 +37,16 @@
       "Bash(node -e \"try{require.resolve\\('sharp'\\);console.log\\('sharp-ok'\\)}catch\\(e\\){console.log\\('no-sharp'\\)}\")",
       "Bash(node *)",
       "Bash(nslookup -type=TXT redescubreapp.com 8.8.8.8)",
-      "PowerShell(npx tsc --noEmit)"
+      "PowerShell(npx tsc --noEmit)",
+      "PowerShell(nslookup *)",
+      "PowerShell(try { $r = Invoke-WebRequest -Uri \"https://redescubreapp.com/proveedor/registro\" -Method Head -MaximumRedirection 0 -UseBasicParsing -ErrorAction Stop; \"Status: $\\($r.StatusCode\\)\" } catch { $resp = $_.Exception.Response; if \\($resp\\) { \"Status: $\\([int]$resp.StatusCode\\) Location: $\\($resp.Headers['Location']\\)\" } else { \"Error: $\\($_.Exception.Message\\)\" } })",
+      "PowerShell(try { Invoke-WebRequest -Uri \"https://redescubreapp.com/proveedor/registro\" -Method Get -MaximumRedirection 0 -UseBasicParsing -ErrorAction Stop | Out-Null } catch { $resp = $_.Exception.Response; \"redescubreapp.com -> $\\([int]$resp.StatusCode\\) $\\($resp.Headers['Location']\\)\" }; try { $r2 = Invoke-WebRequest -Uri \"https://re-descubre.vercel.app/proveedor/registro\" -Method Get -MaximumRedirection 0 -UseBasicParsing -ErrorAction Stop; \"vercel.app -> $\\($r2.StatusCode\\) \\(sirve la página directamente, NO redirige al dominio\\)\" } catch { $resp = $_.Exception.Response; \"vercel.app -> $\\([int]$resp.StatusCode\\) $\\($resp.Headers['Location']\\)\" })",
+      "PowerShell(curl.exe -s -o NUL -w \"redescubreapp.com -> %{http_code} Location: %{redirect_url}`n\" -I \"https://redescubreapp.com/proveedor/registro\"; curl.exe -s -o NUL -w \"www.redescubreapp.com -> %{http_code} Location: %{redirect_url}`n\" -I \"https://www.redescubreapp.com/proveedor/registro\"; curl.exe -s -o NUL -w \"re-descubre.vercel.app -> %{http_code} Location: %{redirect_url}`n\" -I \"https://re-descubre.vercel.app/proveedor/registro\")",
+      "PowerShell(npx vercel projects ls 2>$null | Select-Object -First 20)",
+      "PowerShell(npx vercel domains ls 2>$null)",
+      "PowerShell(npx vercel projects ls)",
+      "PowerShell(npx vercel domains ls; npx vercel alias ls | Select-Object -First 15)",
+      "mcp__supabase__get_logs"
     ]
   },
   "enableAllProjectMcpServers": true,
