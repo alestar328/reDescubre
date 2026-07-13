@@ -279,6 +279,34 @@ export async function updateActivity(
   return { error: null };
 }
 
+export async function deleteActivity(supabase: SupabaseClient, activityId: string) {
+  // Recuperar las URLs de imágenes antes de borrar (el CASCADE elimina las filas)
+  const { data: images } = await supabase
+    .from("activity_images")
+    .select("url")
+    .eq("activity_id", activityId)
+    .returns<{ url: string }[]>();
+
+  // Borrar la actividad: horarios, imágenes y items de agenda caen por ON DELETE CASCADE
+  const { error } = await supabase
+    .from("activities")
+    .delete()
+    .eq("id", activityId);
+
+  if (error) return { error };
+
+  // Limpiar los ficheros de Storage (best-effort: la actividad ya no existe)
+  const paths = (images ?? [])
+    .map((img) => img.url.split("/activity-images/")[1])
+    .filter((p): p is string => Boolean(p));
+
+  if (paths.length > 0) {
+    await supabase.storage.from("activity-images").remove(paths);
+  }
+
+  return { error: null };
+}
+
 export async function toggleActivityPublished(
   supabase: SupabaseClient,
   activityId: string,
