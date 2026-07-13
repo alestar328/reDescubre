@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Save, Loader2 } from "lucide-react";
+import { Save, Loader2, AlertCircle } from "lucide-react";
 import { categories } from "@/lib/mock-data";
 import type { Activity } from "@/lib/mock-data";
 import ScheduleEditor, { type ScheduleSlot } from "./ScheduleEditor";
@@ -59,7 +59,58 @@ const defaultData: ActivityFormData = {
 const inputClass =
   "w-full border border-border rounded-xl px-3.5 py-2.5 text-sm text-ink bg-surface focus:outline-none focus:ring-2 focus:ring-primary placeholder:text-ink-light/50";
 
+const inputErrorClass =
+  "w-full border border-red-400 rounded-xl px-3.5 py-2.5 text-sm text-ink bg-surface focus:outline-none focus:ring-2 focus:ring-red-400 placeholder:text-ink-light/50";
+
 const labelClass = "block text-sm font-medium text-ink mb-1.5";
+
+type FieldErrors = Partial<Record<keyof ActivityFormData, string>>;
+
+/** Acepta URLs con o sin protocolo ("www.test.com" → "https://www.test.com"). */
+export function normalizeUrl(raw: string): string {
+  const value = raw.trim();
+  if (!value) return "";
+  return /^https?:\/\//i.test(value) ? value : `https://${value}`;
+}
+
+function isValidUrl(raw: string): boolean {
+  try {
+    const url = new URL(normalizeUrl(raw));
+    // Exigir al menos un punto en el dominio ("test" no vale, "test.com" sí)
+    return url.hostname.includes(".");
+  } catch {
+    return false;
+  }
+}
+
+function validateForm(form: ActivityFormData): FieldErrors {
+  const errors: FieldErrors = {};
+
+  if (!form.title.trim()) errors.title = "Escribe el nombre de la actividad.";
+  if (!form.description.trim()) errors.description = "Escribe una descripción de la actividad.";
+  if (!form.durationMin || form.durationMin < 15 || form.durationMin > 480)
+    errors.durationMin = "La duración debe estar entre 15 y 480 minutos.";
+  if (!form.isFree && (form.price == null || form.price <= 0))
+    errors.price = "Indica el precio de la actividad (mayor que 0).";
+  if (form.minAge > form.maxAge)
+    errors.maxAge = "La edad máxima debe ser igual o mayor que la mínima.";
+  if (form.bookingUrl.trim() && !isValidUrl(form.bookingUrl))
+    errors.bookingUrl = "El enlace no parece válido. Ejemplo: www.tuweb.com o https://tuweb.com";
+  if (!form.location.trim()) errors.location = "Indica la dirección donde se realiza la actividad.";
+  if (!form.city.trim()) errors.city = "Indica la ciudad.";
+
+  return errors;
+}
+
+function FieldError({ message }: { message?: string }) {
+  if (!message) return null;
+  return (
+    <p className="flex items-center gap-1 text-xs text-red-600 mt-1" role="alert">
+      <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+      {message}
+    </p>
+  );
+}
 
 // Etiqueta de precio que se muestra en tarjetas y fichas (PriceBadge)
 export function buildPriceLabel(data: Pick<ActivityFormData, "isFree" | "isVariablePrice" | "price">): string {
@@ -77,24 +128,65 @@ export function buildPriceLabel(data: Pick<ActivityFormData, "isFree" | "isVaria
  */
 export default function ActivityForm({ initialData, onSubmit, submitLabel = "Guardar actividad" }: ActivityFormProps) {
   const [form, setForm] = useState<ActivityFormData>({ ...defaultData, ...initialData });
+  const [errors, setErrors] = useState<FieldErrors>({});
   const [isSaving, setIsSaving] = useState(false);
   const [savedOk, setSavedOk] = useState(false);
 
   function set<K extends keyof ActivityFormData>(key: K, value: ActivityFormData[K]) {
     setForm((prev) => ({ ...prev, [key]: value }));
+    // Al corregir un campo, su error desaparece
+    if (errors[key]) setErrors((prev) => ({ ...prev, [key]: undefined }));
   }
+
+  /** Valida un solo campo al salir de él (onBlur). */
+  function validateField(key: keyof ActivityFormData) {
+    const fieldError = validateForm(form)[key];
+    setErrors((prev) => ({ ...prev, [key]: fieldError }));
+  }
+
+  function cls(key: keyof ActivityFormData) {
+    return errors[key] ? inputErrorClass : inputClass;
+  }
+
+  // ids de los inputs para poder enfocar el primer campo con error
+  const fieldIds: Partial<Record<keyof ActivityFormData, string>> = {
+    title: "act-title",
+    description: "act-desc",
+    durationMin: "act-duration",
+    price: "act-price",
+    maxAge: "act-max-age",
+    bookingUrl: "act-booking-url",
+    location: "act-location",
+    city: "act-city",
+  };
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+
+    const validation = validateForm(form);
+    setErrors(validation);
+    const firstError = (Object.keys(validation) as (keyof ActivityFormData)[])
+      .find((key) => validation[key]);
+    if (firstError) {
+      const el = document.getElementById(fieldIds[firstError] ?? "");
+      el?.scrollIntoView({ behavior: "smooth", block: "center" });
+      el?.focus({ preventScroll: true });
+      return;
+    }
+
     setIsSaving(true);
-    await onSubmit({ ...form, priceLabel: buildPriceLabel(form) });
+    await onSubmit({
+      ...form,
+      bookingUrl: normalizeUrl(form.bookingUrl),
+      priceLabel: buildPriceLabel(form),
+    });
     setIsSaving(false);
     setSavedOk(true);
     setTimeout(() => setSavedOk(false), 2500);
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-8">
+    <form onSubmit={handleSubmit} noValidate className="space-y-8">
 
       {/* Sección: Información básica */}
       <fieldset className="space-y-5">
@@ -110,9 +202,11 @@ export default function ActivityForm({ initialData, onSubmit, submitLabel = "Gua
             required
             value={form.title}
             onChange={(e) => set("title", e.target.value)}
+            onBlur={() => validateField("title")}
             placeholder="Ej: Paddle Surf para principiantes"
-            className={inputClass}
+            className={cls("title")}
           />
+          <FieldError message={errors.title} />
         </div>
 
         <div>
@@ -138,9 +232,11 @@ export default function ActivityForm({ initialData, onSubmit, submitLabel = "Gua
             rows={4}
             value={form.description}
             onChange={(e) => set("description", e.target.value)}
+            onBlur={() => validateField("description")}
             placeholder="Describe la actividad de forma atractiva para jóvenes de 12-25 años. ¿Qué van a hacer? ¿Qué incluye?"
-            className={`${inputClass} resize-none`}
+            className={`${cls("description")} resize-none`}
           />
+          <FieldError message={errors.description} />
         </div>
 
         <div>
@@ -168,8 +264,10 @@ export default function ActivityForm({ initialData, onSubmit, submitLabel = "Gua
             step={15}
             value={form.durationMin}
             onChange={(e) => set("durationMin", Number(e.target.value))}
-            className={inputClass}
+            onBlur={() => validateField("durationMin")}
+            className={cls("durationMin")}
           />
+          <FieldError message={errors.durationMin} />
           <p className="text-xs text-ink-light mt-1">
             {form.durationMin >= 60
               ? `${Math.floor(form.durationMin / 60)}h ${form.durationMin % 60 > 0 ? `${form.durationMin % 60}min` : ""}`
@@ -224,11 +322,13 @@ export default function ActivityForm({ initialData, onSubmit, submitLabel = "Gua
                   min={0}
                   step={0.5}
                   value={form.price ?? ""}
-                  onChange={(e) => set("price", Number(e.target.value))}
+                  onChange={(e) => set("price", e.target.value === "" ? null : Number(e.target.value))}
+                  onBlur={() => validateField("price")}
                   placeholder="0.00"
-                  className={`${inputClass} pl-8`}
+                  className={`${cls("price")} pl-8`}
                 />
               </div>
+              <FieldError message={errors.price} />
               {form.price != null && form.price > 0 && (
                 <p className="text-xs text-ink-light mt-1">
                   Se mostrará como: <span className="font-medium text-ink">{buildPriceLabel(form)}</span>
@@ -294,10 +394,12 @@ export default function ActivityForm({ initialData, onSubmit, submitLabel = "Gua
               max={99}
               value={form.maxAge}
               onChange={(e) => set("maxAge", Number(e.target.value))}
-              className={inputClass}
+              onBlur={() => validateField("maxAge")}
+              className={cls("maxAge")}
             />
           </div>
         </div>
+        <FieldError message={errors.maxAge} />
       </fieldset>
 
       {/* Sección: Reservas */}
@@ -311,12 +413,15 @@ export default function ActivityForm({ initialData, onSubmit, submitLabel = "Gua
           </label>
           <input
             id="act-booking-url"
-            type="url"
+            type="text"
+            inputMode="url"
             value={form.bookingUrl}
             onChange={(e) => set("bookingUrl", e.target.value)}
-            placeholder="https://booksy.com/es-es/tu-negocio"
-            className={inputClass}
+            onBlur={() => validateField("bookingUrl")}
+            placeholder="www.booksy.com/es-es/tu-negocio"
+            className={cls("bookingUrl")}
           />
+          <FieldError message={errors.bookingUrl} />
           <p className="text-xs text-ink-light mt-1">
             Si gestionas las plazas en tu propia plataforma (Booksy, Calendly, tu web...), pega aquí el
             enlace. Los jóvenes verán un botón «Reservar» que les llevará directamente a él.
@@ -337,9 +442,11 @@ export default function ActivityForm({ initialData, onSubmit, submitLabel = "Gua
             required
             value={form.location}
             onChange={(e) => set("location", e.target.value)}
+            onBlur={() => validateField("location")}
             placeholder="Ej: Carrer de Pallars, 193"
-            className={inputClass}
+            className={cls("location")}
           />
+          <FieldError message={errors.location} />
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div>
@@ -361,9 +468,11 @@ export default function ActivityForm({ initialData, onSubmit, submitLabel = "Gua
               required
               value={form.city}
               onChange={(e) => set("city", e.target.value)}
+              onBlur={() => validateField("city")}
               placeholder="Barcelona"
-              className={inputClass}
+              className={cls("city")}
             />
+            <FieldError message={errors.city} />
           </div>
         </div>
       </fieldset>
@@ -410,6 +519,12 @@ export default function ActivityForm({ initialData, onSubmit, submitLabel = "Gua
         </button>
         {savedOk && (
           <span className="text-sm text-green-600 font-medium">Los cambios se han guardado.</span>
+        )}
+        {Object.values(errors).some(Boolean) && (
+          <span className="flex items-center gap-1.5 text-sm text-red-600 font-medium">
+            <AlertCircle className="w-4 h-4 shrink-0" />
+            Revisa los campos marcados en rojo.
+          </span>
         )}
       </div>
     </form>

@@ -46,7 +46,15 @@
       "PowerShell(npx vercel domains ls 2>$null)",
       "PowerShell(npx vercel projects ls)",
       "PowerShell(npx vercel domains ls; npx vercel alias ls | Select-Object -First 15)",
-      "mcp__supabase__get_logs"
+      "mcp__supabase__get_logs",
+      "Bash(git check-ignore *)",
+      "Bash(echo \"exit: $?\")",
+      "Bash(rm .claude/skills/supabase .claude/skills/supabase-postgres-best-practices)",
+      "Bash(export MSYS=winsymlinks:nativestrict)",
+      "Bash(ln -s ../../.agents/skills/supabase .claude/skills/supabase)",
+      "Bash(ln -s ../../.agents/skills/supabase-postgres-best-practices .claude/skills/supabase-postgres-best-practices)",
+      "Bash(git add *)",
+      "Bash(git restore *)"
     ]
   },
   "enableAllProjectMcpServers": true,

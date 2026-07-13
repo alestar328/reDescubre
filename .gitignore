@@ -24,3 +24,6 @@ Thumbs.db
 # Editor
 .vscode/
 .idea/
+
+# Skills instalados como junction/symlink hacia .agents/skills (evita duplicados en git)
+.claude/skills/
